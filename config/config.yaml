@@ -1,0 +1,38 @@
+paths:
+  results_dir: "results"  # 결과 저장용 (옵션)
+  models_dir: "src/models"
+  logs_dir: "logs"
+  error_cases_dir: "error_cases"  # 에러 케이스 저장 디렉토리
+  uncertain_cases_dir: "uncertain_cases"  # 불확실한 판정 결과 저장 디렉토리
+
+model:
+  xgb_path: "src/models/xgb_model.pkl"
+  lgbm_path: "src/models/lgbm_model.pkl"
+
+processing:
+  image_size: [320, 180]  # 입력 이미지 크기
+  confidence_threshold: 0.45  # EV 판단 임계값
+  batch_size: 100  # 배치 처리 크기
+  save_options:
+    save_error_image: true  # 에러 케이스 이미지 저장 여부
+    save_uncertain_image: false  # 불확실한 케이스 이미지 저장 여부
+    resize_saved_image: true  # 저장 시 이미지 리사이즈 여부
+    saved_image_size: [640, 480]  # 저장할 이미지 크기
+  
+realtime:
+  enabled: true  # 실시간 처리 모드
+  save_results: false  # 결과 파일 저장 여부
+  error_handling:
+    retry_count: 3  # 처리 실패시 재시도 횟수
+    timeout: 0.5  # 처리 제한 시간 (초)
+    retry_delay: 0.1  # 재시도 간 대기 시간 (초)
+  logging:
+    level: "INFO"  # 로깅 레벨 (DEBUG, INFO, WARNING, ERROR)
+    save_errors: true  # 에러 로그 저장 여부
+  performance:
+    max_processing_time: 0.15  # 최대 처리 시간 (초)
+    skip_if_exceeded: true  # 처리 시간 초과시 건너뛰기 여부
+  image:
+    min_size: [100, 100]  # 최소 이미지 크기
+    max_size: [1920, 1080]  # 최대 이미지 크기
+    required_channels: 3  # 필요한 이미지 채널 수 (RGB) 
