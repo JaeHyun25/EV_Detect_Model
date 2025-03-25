@@ -11,15 +11,15 @@ from .ev_classifier import EVClassifier
 @dataclass
 class DetectionResult:
     """검출 결과 데이터 클래스"""
-    plate_number: str
-    is_ev: bool
-    confidence: float
-    timestamp: datetime
-    processing_time: float
-    plate_area: Dict  # 번호판 위치 정보
+    plate_number: str    # 번호판 번호
+    is_ev: bool          # 전기차 여부
+    confidence: float    # 신뢰도
+    timestamp: datetime  # 검출 시간
+    processing_time: float    # 처리 시간
+    plate_area: Dict  # 번호판 위치 정보    
 
-class EVDetector:
-    def __init__(self, xgb_model_path: str, lgbm_model_path: str):
+class EVDetector:    # 전기차 검출을 위한 클래스
+    def __init__(self, xgb_model_path: str, lgbm_model_path: str):    # EVClassifier를 초기화
         """초기화"""
         try:
             self.classifier = EVClassifier(xgb_model_path, lgbm_model_path)
@@ -29,10 +29,10 @@ class EVDetector:
             self.logger.error(f"EVDetector 초기화 중 오류 발생: {str(e)}")
             raise
 
-    def process_frame(self, frame: np.ndarray, plate_info: Dict) -> DetectionResult:
+    def process_frame(self, frame: np.ndarray, plate_info: Dict) -> DetectionResult:    # 전기차 여부 예측
         """단일 프레임 처리"""
         try:
-            start_time = time.time()
+            start_time = time.time()    # 시간 측정
             
             # plate_info 구조 로깅
             self.logger.info(f"입력된 plate_info 구조: {json.dumps(plate_info, indent=2, ensure_ascii=False)}")
