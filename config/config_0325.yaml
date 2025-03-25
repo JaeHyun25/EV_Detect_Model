@@ -1,0 +1,38 @@
+# 모델 설정
+model:
+  xgb_path: "models/xgb_model.joblib"
+  lgbm_path: "models/lgb_model.joblib"
+
+# 경로 설정
+paths:
+  logs_dir: "logs"
+  error_cases_dir: "error_cases"
+  uncertain_cases_dir: "uncertain_cases"
+
+# 처리 설정
+processing:
+  confidence_threshold: 0.45  # 예측 신뢰도 임계값
+  max_workers: 4  # 병렬 처리 최대 워커 수
+  batch_size: 32  # 배치 처리 크기
+  save_options:
+    save_error_image: true
+    save_uncertain_image: true
+    resize_saved_image: true
+    saved_image_size: [640, 360]  # 저장할 이미지 크기
+
+# 실시간 처리 설정
+realtime:
+  error_handling:
+    retry_count: 3  # 재시도 횟수
+    retry_delay: 0.1  # 재시도 간격 (초)
+  performance:
+    max_processing_time: 1.0  # 최대 처리 시간 (초)
+    skip_if_exceeded: true  # 처리 시간 초과 시 건너뛰기
+
+# 로깅 설정
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_rotation:
+    max_bytes: 10485760  # 10MB
+    backup_count: 5 
