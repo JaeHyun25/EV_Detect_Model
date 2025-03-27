@@ -18,7 +18,7 @@ class DetectionResult:
     processing_time: float  # 처리 시간
     plate_area: Dict    # 번호판 위치 정보
     metrics: ProcessingMetrics  # 처리 메트릭
-
+# 전기차 여부 판별 주요 클래스
 class EVDetector:
     def __init__(self, xgb_model_path: str, lgbm_model_path: str, **kwargs):
         """초기화
@@ -35,7 +35,7 @@ class EVDetector:
         except Exception as e:
             self.logger.error(f"EVDetector 초기화 중 오류 발생: {str(e)}")
             raise
-
+# 단일 프레임에서 번호판 정보를 처리하고 결과 반환
     def process_frame(self, frame: np.ndarray, plate_info: Dict) -> DetectionResult:
         """단일 프레임 처리"""
         try:
@@ -80,7 +80,7 @@ class EVDetector:
         return results
 
     def save_results(self, results: List[DetectionResult], output_path: str):
-        """결과 저장"""
+        """처리 결과 JSON 저장"""
         try:
             # 결과를 딕셔너리 리스트로 변환
             results_dict = [
@@ -111,7 +111,7 @@ class EVDetector:
         except Exception as e:
             self.logger.error(f"결과 저장 중 오류 발생: {str(e)}")
             raise
-
+# 전체 처리 과정에 대한 요약 정보 제공
     def get_metrics_summary(self) -> Dict:
         """처리 메트릭 요약 정보 반환"""
         return self.classifier.get_metrics_summary() 
