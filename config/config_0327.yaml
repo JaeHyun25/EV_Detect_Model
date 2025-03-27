@@ -1,0 +1,37 @@
+# 모델 설정
+model:
+  xgb_path: "models/xgb_model.joblib"
+  lgbm_path: "models/lgb_model.joblib"
+
+# 경로 설정
+paths:
+  logs_dir: "logs"
+  error_cases_dir: "error_cases"
+  uncertain_cases_dir: "uncertain_cases"
+
+# 처리 설정
+processing:
+  confidence_threshold: 0.45  # 예측 신뢰도 임계값
+  max_processing_time: 1.0  # 최대 처리 시간 (초)
+  save_options:
+    save_error_image: true  # 오류 발생 케이스 저장
+    save_uncertain_image: true  # 신뢰도 낮은 케이스 저장
+    resize_saved_image: true
+    saved_image_size: [640, 360]  # 원본 이미지 리사이즈 해서 저장장
+
+# 실시간 처리 설정
+realtime:
+  error_handling:
+    retry_count: 3  # 재시도 횟수
+    retry_delay: 0.1  # 재시도 간격 (초)
+  performance:
+    max_processing_time: 1.0  # 최대 처리 시간 (초)
+    skip_if_exceeded: true  # 처리 시간 초과 시 건너뛰기
+
+# 로깅 설정
+logging:
+  level: "INFO" # INFO 레벨 로깅은 일반적인 정보, 경고, 오류 모두 기록록
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_rotation:
+    max_bytes: 10485760  # 로그 파일 10MB 도달하면 새로운 파일 생성성
+    backup_count: 5 
