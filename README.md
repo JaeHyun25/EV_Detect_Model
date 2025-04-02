@@ -22,8 +22,9 @@
 
 1. 저장소 클론
 ```bash
-git clone https://github.com/yourusername/ev-detector-core.git
-cd ev-detector-core
+git clone https://github.com/JaeHyun25/EV_Detect_Model.git
+cd EV_Detect_Model
+
 ```
 
 2. 가상환경 생성 및 활성화
