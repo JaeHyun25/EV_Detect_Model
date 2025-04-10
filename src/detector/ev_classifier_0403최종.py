@@ -68,7 +68,7 @@ class EVClassifier:
             hsv_image = preprocess_image(frame, crop_box, area.get('angle', 0))
             
             # 특징 추출
-            features = extract_features(hsv_image)
+            features = extract_features(hsv_image)        # hsv 전처리된 이미지 데이터의 numpy 배열(서버에서 들어오는 np.array 형태의 데이터)
             
             # 예측
             xgb_pred = self.xgb_model.predict([features])[0]
