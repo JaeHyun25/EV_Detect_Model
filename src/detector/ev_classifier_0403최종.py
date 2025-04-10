@@ -113,11 +113,11 @@ class EVClassifier:
             
         return {
             'total_processed': len(self.metrics_history),
-            'avg_processing_time': np.mean([m.elapsed_time for m in self.metrics_history]), # 평균 처리 시간간
+            'avg_processing_time': np.mean([m.elapsed_time for m in self.metrics_history]), # 평균 처리 시간
             'avg_confidence': np.mean([m.confidence_score for m in self.metrics_history]),  # 신뢰도
-            'error_rate': sum(1 for m in self.metrics_history if m.error_occurred) / len(self.metrics_history),
+            'error_rate': sum(1 for m in self.metrics_history if m.error_occurred) / len(self.metrics_history),    # 오류 발생률
             'model_usage': {
-                'xgb': sum(1 for m in self.metrics_history if m.model_used == 'xgb'),
+                'xgb': sum(1 for m in self.metrics_history if m.model_used == 'xgb'),            # xgb, lgbm의 사용 횟수
                 'lgbm': sum(1 for m in self.metrics_history if m.model_used == 'lgbm')
             }
         } 
