@@ -60,13 +60,13 @@ class EVDetector:
             
             # 결과 생성
             return DetectionResult(
-                plate_number=plate_info.get('text', ''),
-                is_ev=is_ev,
-                confidence=metrics.confidence_score,
-                timestamp=datetime.now(),
-                processing_time=metrics.elapsed_time,
-                plate_area=area,
-                metrics=metrics
+                plate_number=plate_info.get('text', ''),    # 번호판 번호
+                is_ev=is_ev,                                # 전기차 여부
+                confidence=metrics.confidence_score,        # 신뢰도
+                timestamp=datetime.now(),                   # 검출 시간
+                processing_time=metrics.elapsed_time,       # 처리 시간
+                plate_area=area,                            # 번호판 위치 정보
+                metrics=metrics                             # 처리 메트릭
             )
             
         except Exception as e:
