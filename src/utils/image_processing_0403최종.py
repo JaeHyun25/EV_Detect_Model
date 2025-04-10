@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from typing import Tuple, Dict
 import logging
-
+# 이미지 전처리, 특징 추출
 logger = logging.getLogger(__name__) # 모듈 레벨 로거 (필요시 함수 내에서 getLogger)
 
 def preprocess_image(image: np.ndarray, crop_box: Tuple[int, int, int, int],
@@ -43,7 +43,7 @@ def preprocess_image(image: np.ndarray, crop_box: Tuple[int, int, int, int],
         # 이미지 리사이즈
         resized = cv2.resize(cropped, target_size)
 
-        # 회전 처리
+        # 회전 처리  - 리사이즈 된 이미지의 가로 세로 중간지점을 회전 중심 사용
         if angle != 0:
             center = (resized.shape[1]//2, resized.shape[0]//2)
             matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
