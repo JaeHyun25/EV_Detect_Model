@@ -22,10 +22,10 @@ def setup_logging(log_dir: str = "logs", config: dict = None):
     # 로깅 설정(기본적인 basice 사용)
     logging.basicConfig(
         level=logging.INFO,    # 로깅레벨 INFO이상 기록 - 일반적인 정보, 시스템의 정상적인 동작 기록 이상 동작시 기록
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',    # 로그 메시지 구조 표준 형식
         handlers=[
-            file_handler,    # RotatingFileHandler 사용용
-            logging.StreamHandler()                        # 실시간 로그 확인 가
+            file_handler,                                  # 로그를 파일과 콘솔에 동시에 기록
+            logging.StreamHandler()                        # 실시간 로그 확인 가능
         ]
     )
     
