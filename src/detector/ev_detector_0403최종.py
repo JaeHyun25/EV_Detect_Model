@@ -72,7 +72,7 @@ class EVDetector:
         except Exception as e:
             self.logger.error(f"프레임 처리 중 오류 발생: {str(e)}")
             raise
-
+    # Numpy 타입을 파이썬의 기본 타입으로 변환, JSON 직렬화 
     def convert_numpy_types(obj):
         """딕셔너리/리스트 내의 numpy 타입을 파이썬 기본 타입으로 변환"""
         if isinstance(obj, dict):
