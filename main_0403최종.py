@@ -119,16 +119,16 @@ def save_uncertain_case(config: dict, frame: np.ndarray, plate_info: dict, resul
             # 현재 시간을 파일명으로 사용
             timestamp = datetime.now().strftime('%H%M%S_%f')
             
-            # 이미지 저장 (설정에 따라)
-            image_path = None
-            if config['processing']['save_options']['save_uncertain_image']:
-                save_frame = frame.copy()
-                if config['processing']['save_options']['resize_saved_image']:
-                    save_size = tuple(config['processing']['save_options']['saved_image_size'])
-                    save_frame = cv2.resize(save_frame, save_size)
+            # # 이미지 저장 (설정에 따라)
+            # image_path = None
+            # if config['processing']['save_options']['save_uncertain_image']:
+            #     save_frame = frame.copy()
+            #     if config['processing']['save_options']['resize_saved_image']:
+            #         save_size = tuple(config['processing']['save_options']['saved_image_size'])
+            #         save_frame = cv2.resize(save_frame, save_size)
                 
-                image_path = os.path.join(uncertain_dir, f'{timestamp}.jpg')
-                cv2.imwrite(image_path, save_frame)
+            #     image_path = os.path.join(uncertain_dir, f'{timestamp}.jpg')
+            #     cv2.imwrite(image_path, save_frame)
             
             # 판정 정보 저장
             case_info = {
