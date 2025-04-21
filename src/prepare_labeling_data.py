@@ -7,6 +7,7 @@ import csv
 import glob
 import re
 import sys
+
 # --- 설정 (필요에 따라 경로 수정) ---
 
 # 사용자 홈 디렉토리 경로를 동적으로 가져오기 (예: /home/evmonitoringadmin)
@@ -52,8 +53,12 @@ EV_FOLDER = os.path.join(ANPR_IMG_BASE, "EV")
 ICE_FOLDER = os.path.join(ANPR_IMG_BASE, "ICE")
 
 
-# 라벨링 데이터셋 저장 폴더 (Workspace 아래에 생성)
-LABELING_OUTPUT_FOLDER = os.path.join(WORKSPACE_BASE, "labeling_dataset")
+# 라벨링 데이터셋 기본 저장 폴더 (Workspace 아래에 생성)
+LABELING_BASE_FOLDER = os.path.join(WORKSPACE_BASE, "labeling_dataset")
+
+# --- 처리한 날짜별 라벨링 데이터셋 저장 폴더 정의 ---
+# 라벨링 기본 저장 폴더 아래에 처리한 날짜 이름으로 폴더 생성
+LABELING_OUTPUT_FOLDER = os.path.join(LABELING_BASE_FOLDER, selected_date_str)
 
 # 라벨링 데이터셋 내 이미지 및 CSV 서브폴더 경로 정의
 IMAGE_SUBFOLDER = os.path.join(LABELING_OUTPUT_FOLDER, "jpg")
@@ -63,10 +68,12 @@ CSV_SUBFOLDER = os.path.join(LABELING_OUTPUT_FOLDER, "csv")
 # 결과 CSV 파일 경로 (CSV 서브폴더 안에 저장)
 OUTPUT_CSV_FILE = os.path.join(CSV_SUBFOLDER, "labeling_data.csv")
 
-# --- 라벨링 데이터셋 기본 저장 폴더 및 서브폴더 생성 ---
-os.makedirs(LABELING_OUTPUT_FOLDER, exist_ok=True)
-os.makedirs(IMAGE_SUBFOLDER, exist_ok=True)
-os.makedirs(CSV_SUBFOLDER, exist_ok=True)
+# --- 라벨링 데이터셋 기본 저장 폴더 및 날짜별 서브폴더, 이미지/CSV 서브폴더 생성 ---
+os.makedirs(LABELING_BASE_FOLDER, exist_ok=True) # 기본 라벨링 폴더
+os.makedirs(LABELING_OUTPUT_FOLDER, exist_ok=True) # 날짜별 라벨링 폴더
+os.makedirs(IMAGE_SUBFOLDER, exist_ok=True) # 이미지 서브폴더
+os.makedirs(CSV_SUBFOLDER, exist_ok=True) # CSV 서브폴더
+
 
 # --- CSV 헤더 정의 ---
 csv_header = [
@@ -79,7 +86,7 @@ csv_header = [
     'processing_time',
     'saved_in_uncertain',
     'image_source_folder', # 이미지가 발견된 원본 폴더 (TEMP, MISRECOG, MISRECOG2, EV, ICE 등)
-    'copied_image_filename' # 라벨링 폴더(jpg 서브폴더)로 복사된 이미지의 파일 이름 (csv 파일 기준 상대 경로)
+    'copied_image_filename' # 라벨링 폴더(날짜별/jpg 서브폴더)로 복사된 이미지의 파일 이름 (csv 파일 기준 상대 경로)
 ]
 
 # --- 이미지 정보 및 CSV 데이터 저장 리스트 ---
@@ -168,7 +175,6 @@ try:
 
 
                 if not include_in_csv:
-                    # print(f"로그 항목 건너뛰기 (필터링 조건 불만족): {line.strip()}")
                     continue # 필터링 조건 불만족 시 건너뛰기
 
                 filtered_count += 1 # 필터링 통과 항목 카운트
@@ -222,7 +228,7 @@ try:
                          image_source_folder = "ICE"
 
 
-                # --- 이미지를 찾았다면 라벨링 폴더(jpg 서브폴더)로 복사하고 CSV 데이터 추가 ---
+                # --- 이미지를 찾았다면 라벨링 폴더(날짜별/jpg 서브폴더)로 복사하고 CSV 데이터 추가 ---
                 if found_image_path:
                     found_image_count += 1
                     # 복사될 이미지 파일 이름 생성 (원본 출처 폴더와 원본 파일 이름 사용)
@@ -237,7 +243,7 @@ try:
                         shutil.copy(found_image_path, copied_image_full_path)
 
                         # CSV 데이터 리스트에 추가
-                        # CSV에는 라벨링 폴더 기준 상대 경로를 기록
+                        # CSV에는 라벨링 폴더 기준 상대 경로를 기록 (날짜별 폴더/jpg 서브폴더 기준)
                         relative_copied_image_path_for_csv = os.path.join("jpg", copied_image_filename)
 
 
@@ -283,7 +289,7 @@ if len(csv_data) > 1: # 헤더 제외 데이터가 1개 이상인 경우
         print(f"필터링 조건 만족 로그 항목 수: {filtered_count}") # 필터링된 항목 개수 출력
         print(f"총 찾은 이미지 개수 (필터링 조건 만족 + 이미지 찾음): {found_image_count}") # 필터링 통과 항목 중 이미지 찾은 개수
         print(f"데이터 CSV 파일 저장 완료: {OUTPUT_CSV_FILE}")
-        print(f"라벨링할 이미지 저장 폴더: {IMAGE_SUBFOLDER}")
+        print(f"라벨링할 이미지 저장 폴더: {IMAGE_SUBFOLDER}") # JPG 서브폴더를 가리킴
 
     except Exception as e:
         print(f"오류: CSV 파일 '{OUTPUT_CSV_FILE}' 저장 실패: {e}")
@@ -291,4 +297,4 @@ else:
     print(f"\n작업 완료.")
     print(f"총 로그 항목 처리: {processed_count}")
     print(f"필터링 조건 만족 로그 항목 수: {filtered_count}")
-    print("필터링 조건을 만족하는 로그 항목이 없거나, 해당 이미지 파일을 찾지 못했습니다.")
+    print("필터링 조건을 만족하는 로그 항목이 없거나, 해당 이미지를 찾지 못했습니다.")
