@@ -22,9 +22,27 @@ ANPR_IMG_BASE = os.path.join(HOME_DIR, "ANPR_IMG")
 # 종합 로그 파일 기본 저장 디렉토리 (Workspace 기준)
 COMPREHENSIVE_LOG_BASE_DIR = os.path.join(WORKSPACE_BASE, "ev_detect", "logs", "comprehensive_predictions")
 
-# 스크립트 실행 날짜에 맞는 종합 로그 파일 경로
-today_str = datetime.now().strftime('%Y%m%d')
-JSONL_FILE_PATH = os.path.join(COMPREHENSIVE_LOG_BASE_DIR, today_str, "predictions.jsonl")
+
+# --- 처리할 날짜 결정 (명령행 인자 사용) ---
+# 스크립트 실행 시 날짜를 YYYYMMDD 형식으로 명령행 인자로 받습니다.
+if len(sys.argv) > 1:
+    # 명령행 인자가 제공되면 해당 날짜 사용
+    date_to_process_str = sys.argv[1]
+    # 날짜 형식 검증 (YYYYMMDD)
+    try:
+        datetime.strptime(date_to_process_str, '%Y%m%d') # YYYYMMDD 형식인지 확인
+        selected_date_str = date_to_process_str
+    except ValueError:
+        print("오류: 유효하지 않은 날짜 형식입니다. YYYYMMDD 형식으로 입력해주세요.")
+        print(f"사용법: python {sys.argv[0]} [YYYYMMDD]")
+        sys.exit(1) # 날짜 형식이 잘못되면 스크립트 종료
+else:
+    # 명령행 인자가 없으면 오늘 날짜 사용 (기본값)
+    selected_date_str = datetime.now().strftime('%Y%m%d')
+    print(f"날짜가 지정되지 않았습니다. 오늘 날짜 ({selected_date_str}) 데이터로 처리합니다.")
+
+# 종합 로그 파일 경로 (선택된 날짜 기준)
+JSONL_FILE_PATH = os.path.join(COMPREHENSIVE_LOG_BASE_DIR, selected_date_str, "predictions.jsonl")
 
 
 # 이미지 원본 폴더들의 정확한 절대 경로 설정
@@ -49,7 +67,6 @@ OUTPUT_CSV_FILE = os.path.join(CSV_SUBFOLDER, "labeling_data.csv")
 os.makedirs(LABELING_OUTPUT_FOLDER, exist_ok=True)
 os.makedirs(IMAGE_SUBFOLDER, exist_ok=True)
 os.makedirs(CSV_SUBFOLDER, exist_ok=True)
-
 
 # --- CSV 헤더 정의 ---
 csv_header = [
