@@ -6,7 +6,7 @@ import shutil
 import csv
 import glob
 import re
-
+import sys
 # --- 설정 (필요에 따라 경로 수정) ---
 
 # 사용자 홈 디렉토리 경로를 동적으로 가져오기 (예: /home/evmonitoringadmin)
